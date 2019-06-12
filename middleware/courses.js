@@ -2,6 +2,7 @@ const axiosInstance  =require('../axiosInstance')
 const {url_A,url_B,url_C} =require('../urlConfig')
 let course=async (req, res) => {
     axiosInstance.defaults.headers.get['Cookie'] = req.headers.cookie
+    let stuNumber = req.query.number;
     let courses = []
     try {
         let { data: A_total_course } = await axiosInstance.get(
@@ -25,7 +26,11 @@ let course=async (req, res) => {
     try {
         let {
             data: { CourseIsSelect: B_course }
-        } = await axiosInstance.get(url_B + '/courses')
+        } = await axiosInstance.get(url_B + '/courses', {
+            params: {
+                stu_id: stuNumber
+            }
+        })
         for (const c of B_course) {
             courses.push({
                 number: c.BCourse.id,
@@ -40,11 +45,19 @@ let course=async (req, res) => {
 
     try {
         let { data: C_myCourses_string } = await axiosInstance.get(
-            url_C + '/getMy'
+            url_C + '/getMy', {
+                params: {
+                    username: stuNumber
+                }
+            }
         )
         let C_select_course = C_myCourses_string.split('_')
         let { data: C_otherCourses_string } = await axiosInstance.get(
-            url_C + '/getOther'
+            url_C + '/getOther', {
+                params: {
+                    username: stuNumber
+                }
+            }
         )
         let C_notSelect_course = C_otherCourses_string.split('_')
         for (let i = 0; i < C_select_course.length; i = i + 2) {
