@@ -18,7 +18,7 @@ let multiLogin = async function(req, res) {
     }
     try {
         let ans = await axiosInstance.post(url_B + '/login', {
-            number: user.username,
+            id: user.number,
             password: user.password
         })
         if (ans.data.result == true) {
@@ -29,7 +29,7 @@ let multiLogin = async function(req, res) {
     }
     try {
         let ans = await axiosInstance.post(url_C + '/login', {
-            number: user.username,
+            username: user.number,
             password: user.password
         })
         if (ans.data.result == true) {

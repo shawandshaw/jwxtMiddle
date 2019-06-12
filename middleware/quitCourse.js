@@ -18,7 +18,7 @@ let middleWare=async (req, res) => {
             break
         case '软件学院':
             try {
-                result = await axiosInstance.get(url_B + '/cancel', {
+                result = await axiosInstance.get(url_B + '/cancle', {
                     params: {
                         stu_id: student.number,
                         course_id: course.number
