@@ -1,4 +1,4 @@
-const axiosInstance  =require('../axiosInstance')
+const {axiosInstance,formDataAxios}  =require('../axiosInstance')
 const {url_A,url_B,url_C} =require('../urlConfig')
 let course=async (req, res) => {
     axiosInstance.defaults.headers.get['Cookie'] = req.headers.cookie
@@ -47,23 +47,19 @@ let course=async (req, res) => {
     }
 
     try {
-        let { data: C_myCourses_string } = await axiosInstance.get(
-            url_C + '/getMy', {
-                params: {
-                    username: stuNumber
-                }
+        let { data: C_myCourses_string } = await formDataAxios.post(
+            url_C + '/getMy/',{
+                username: stuNumber
             }
         )
         let C_select_course = C_myCourses_string.split('_')
-        let { data: C_otherCourses_string } = await axiosInstance.get(
-            url_C + '/getOther', {
-                params: {
-                    username: stuNumber
-                }
+        let { data: C_otherCourses_string } = await formDataAxios.post(
+            url_C + '/getOther/', {
+                username: stuNumber
             }
         )
         let C_notSelect_course = C_otherCourses_string.split('_')
-        for (let i = 0; i < C_select_course.length; i = i + 2) {
+        for (let i = 0; i+1 < C_select_course.length; i = i + 2) {
             const number = C_select_course[i]
             const name = C_select_course[i + 1]
             let course={
@@ -74,7 +70,7 @@ let course=async (req, res) => {
             }
             insertCourse(course,courses)
         }
-        for (let i = 0; i < C_notSelect_course.length; i = i + 2) {
+        for (let i = 0; i +1< C_notSelect_course.length; i = i + 2) {
             const number = C_notSelect_course[i]
             const name = C_notSelect_course[i + 1]
             let course={

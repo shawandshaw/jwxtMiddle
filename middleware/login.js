@@ -1,4 +1,4 @@
-const axiosInstance  =require('../axiosInstance')
+const {axiosInstance,formDataAxios}  =require('../axiosInstance')
 const {url_A,url_B,url_C} =require('../urlConfig')
 
 
@@ -28,7 +28,7 @@ let multiLogin = async function(req, res) {
         console.log('请求B出错')
     }
     try {
-        let ans = await axiosInstance.post(url_C + '/login', {
+        let ans = await formDataAxios.post(url_C + '/login/', {
             username: user.number,
             password: user.password
         })

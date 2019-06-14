@@ -1,4 +1,4 @@
-const axiosInstance = require('../axiosInstance')
+const {axiosInstance,formDataAxios}  =require('../axiosInstance')
 const { url_A, url_B, url_C } = require('../urlConfig')
 
 let middleWare = async (req, res) => {
@@ -34,9 +34,9 @@ module.exports = middleWare
 
 async function quitInC(student, course, result) {
     try {
-        let ans = await axiosInstance.post(url_C + '/quit', {
+        let ans = await formDataAxios.post(url_C + '/quit/', {
             username: student.number,
-            courseId: course.number
+            id: course.number
         })
         result = ans.data
     } catch (error) {

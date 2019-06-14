@@ -1,4 +1,4 @@
-const axiosInstance  =require('../axiosInstance')
+const {axiosInstance,formDataAxios}  =require('../axiosInstance')
 const {url_A,url_B,url_C} =require('../urlConfig')
 
 
@@ -21,7 +21,7 @@ let middleWare = async function(req, res) {
         console.log('请求B出错')
     }
     try {
-        let {data:{name}} = await axiosInstance.post(url_C + '/getName', {
+        let {data:{name}} = await formDataAxios.post(url_C + '/getName/', {
             username: number,
         })
         return res.send({ name})

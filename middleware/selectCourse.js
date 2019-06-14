@@ -1,4 +1,4 @@
-const axiosInstance = require('../axiosInstance')
+const {axiosInstance,formDataAxios}  =require('../axiosInstance')
 const { url_A, url_B, url_C } = require('../urlConfig')
 
 let middleWare = async (req, res) => {
@@ -60,7 +60,7 @@ async function addStuToA(student) {
             }
         })
     } catch (error) {
-        console.log('A选课出错')
+        console.log('添加学生进A出错')
     }
 }
 
@@ -73,18 +73,18 @@ async function addStuToB(student) {
             }
         })
     } catch (error) {
-        console.log('B选课出错')
+        console.log('添加学生进B出错')
     }
 }
 
 async function addStuToC(student) {
     try {
-        result = await axiosInstance.post(url_C + '/add', {
+        result = await formDataAxios.post(url_C + '/addStudent/', {
             username: student.number,
-            courseId: course.number
+            name: student.name
         })
     } catch (error) {
-        console.log('C选课出错')
+        console.log('添加学生进C出错')
     }
 }
 
@@ -92,9 +92,9 @@ module.exports = middleWare
 
 async function selectInC(student, course, result) {
     try {
-        let ans = await axiosInstance.post(url_C + '/add', {
+        let ans = await formDataAxios.post(url_C + '/add/', {
             username: student.number,
-            courseId: course.number
+            id: course.number
         })
         result = ans.data
     } catch (error) {
