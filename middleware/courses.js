@@ -11,33 +11,36 @@ let course=async (req, res) => {
         let { data: A_selected_course } = await axiosInstance.get(
             url_A + '/api/myCourses'
         )
-        for (let c of A_total_course) {
-            if (A_selected_course.findIndex(e => e.number == c.number) >= 0) {
-                c.isSelected = true
+        for (let course of A_total_course) {
+            if (A_selected_course.findIndex(e => e.number == course.number) >= 0) {
+                course.isSelected = true
             } else {
-                c.isSelected = false
+                course.isSelected = false
             }
-            c.college = c.number[0]=='A'?'建筑学院':'公选课程'
-            courses.push(c)
+            course.college = course.number[0]=='A'?'建筑学院':'公选课程'
+            
+            insertCourse(course, courses);
+            
         }
     } catch (error) {
         console.log('A获取课程出错')
     }
     try {
         let {
-            data: { CourseIsSelect: B_course }
+            data: B_course
         } = await axiosInstance.get(url_B + '/courses', {
             params: {
                 stu_id: stuNumber
             }
         })
         for (const c of B_course) {
-            courses.push({
-                number: c.BCourse.id,
-                name: c.BCourse.name,
-                college: c.BCourse.id[0]=='B'?'软件学院':'公选课程',
-                isSelected: c.isSelect
-            })
+            let course={
+                number: c.course.id,
+                name: c.course.name,
+                college: c.course.id[0]=='B'?'软件学院':'公选课程',
+                isSelected: c.select
+            }
+            insertCourse(course,courses)
         }
     } catch (error) {
         console.log('B获取课程出错')
@@ -63,22 +66,24 @@ let course=async (req, res) => {
         for (let i = 0; i < C_select_course.length; i = i + 2) {
             const number = C_select_course[i]
             const name = C_select_course[i + 1]
-            courses.push({
+            let course={
                 number: number,
                 name: name,
                 college: number[0]=='C'?'历史学院':'公选课程',
                 isSelected: true
-            })
+            }
+            insertCourse(course,courses)
         }
         for (let i = 0; i < C_notSelect_course.length; i = i + 2) {
             const number = C_notSelect_course[i]
             const name = C_notSelect_course[i + 1]
-            courses.push({
+            let course={
                 number: number,
                 name: name,
                 college: number[0]=='C'?'历史学院':'公选课程',
                 isSelected: false
-            })
+            }
+            insertCourse(course,courses)
         }
     } catch (error) {
         console.log('C获取课程出错')
@@ -87,3 +92,18 @@ let course=async (req, res) => {
     return res.send(courses)
 }
 module.exports = course
+
+function insertCourse(course, courses) {
+    if (course.college == '公选课程') {
+        let index = courses.findIndex(c => c.number == course.number);
+        let exist = courses[index];
+        if (!exist) {
+            courses.push(course);
+        }
+        else if (!exist.isSelected) {
+            Object.assign(courses[index], course);
+        }
+    }else{
+        courses.push(course)
+    }
+}

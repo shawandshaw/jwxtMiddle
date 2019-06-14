@@ -4,7 +4,7 @@ const login=require('../middleware/login')
 const course=require('../middleware/courses')
 const select=require('../middleware/selectCourse')
 const quit=require('../middleware/quitCourse')
-
+const name=require('../middleware/name')
 
 
 /* GET home page. */
@@ -18,5 +18,6 @@ router.get('/middle/courses', course)
 
 router.post('/middle/select', select)
 router.post('/middle/quit', quit)
+router.get('/middle/name', name)
 
 module.exports = router
